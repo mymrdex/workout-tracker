@@ -64,10 +64,10 @@ svg { fill:none; stroke:currentColor; stroke-linecap:round; stroke-linejoin:roun
 
 /* TABBAR */
 .tabbar { height:calc(var(--tab-h) + var(--safe)); padding-bottom:var(--safe); flex-shrink:0; display:flex; background:#000; border-top:1px solid var(--border); }
-.tab { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:5px; padding-bottom:10px; cursor:pointer; color:var(--t3); transition:color .15s; }
+.tab { flex:1; display:flex; align-items:center; justify-content:center; padding-bottom:10px; cursor:pointer; color:var(--t3); transition:color .15s; }
 .tab.on { color:var(--lime); }
-.tab svg { width:22px; height:22px; stroke-width:1.6; }
-.tab-lbl { font-size:11px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; }
+.tab svg { width:26px; height:26px; stroke-width:1.6; }
+.tab-lbl { display:none; }
 
 /* PAGE HEADER */
 .pg-head { padding:20px 20px 4px; }
