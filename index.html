@@ -470,12 +470,18 @@ function load() {
 function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2,5); }
 
 function exportData() {
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(new Blob([JSON.stringify(db,null,2)],{type:'application/json'}));
-  a.download = 'workout-tracker-' + new Date().toISOString().slice(0,10) + '.json';
-  a.click(); toast('Exported');
+  confirm2('Export Data', 'Your workout data will be downloaded as a JSON file.', 'Export', () => {
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([JSON.stringify(db,null,2)],{type:'application/json'}));
+    a.download = 'workout-tracker-' + new Date().toISOString().slice(0,10) + '.json';
+    a.click(); toast('Exported');
+  }, 'btn-p');
 }
-function triggerImport() { document.getElementById('file-import').click(); }
+function triggerImport() {
+  confirm2('Import Data', 'This will replace all your current data with the imported file. This cannot be undone.', 'Choose File', () => {
+    document.getElementById('file-import').click();
+  }, 'btn-p');
+}
 function importData(e) {
   const f = e.target.files[0]; if (!f) return;
   const r = new FileReader();
@@ -520,10 +526,12 @@ function empty(icon, title, sub) {
 }
 
 // ── CONFIRM ────────────────────────────────────────────────────────────────
-function confirm2(title, msg, label, cb) {
+function confirm2(title, msg, label, cb, btnClass='btn-d') {
   document.getElementById('cfm-title').textContent = title;
   document.getElementById('cfm-msg').textContent = msg;
-  document.getElementById('cfm-ok').textContent = label||'Delete';
+  const ok = document.getElementById('cfm-ok');
+  ok.textContent = label||'Delete';
+  ok.className = `btn ${btnClass} btn-sm`;
   _cfmCb = cb;
   const el = document.getElementById('cfmov');
   el.style.display='flex'; requestAnimationFrame(()=>el.classList.add('on'));
