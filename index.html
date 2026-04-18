@@ -554,7 +554,7 @@ function goTab(t) {
     const p = document.getElementById('p-'+id);
     if (p) p.classList.toggle('on', id===t);
   });
-  if (tabDirty[t]) renderTab(t);
+  if (tabDirty[t]) requestAnimationFrame(() => renderTab(t));
 }
 
 function renderTab(t) {
@@ -568,8 +568,7 @@ function renderTab(t) {
 
 function dirty(...tabs) {
   tabs.forEach(t => { tabDirty[t]=true; });
-  // Rebuild current tab immediately if it was marked dirty
-  if (tabs.includes(tab)) renderTab(tab);
+  if (tabs.includes(tab)) requestAnimationFrame(() => { if (tabDirty[tab]) renderTab(tab); });
 }
 function dirtyAll() { TABS.forEach(t=>tabDirty[t]=true); }
 
