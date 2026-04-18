@@ -572,7 +572,8 @@ function closePanel(id)  { document.getElementById(id).classList.remove('on'); }
 
 // ── WORKOUTS PAGE ──────────────────────────────────────────────────────────
 function pageWorkouts() {
-  let h = `<div class="sect"><div class="stitle">My Workouts</div><button class="btn btn-p btn-sm" onclick="openNewWorkout()">${IC.plus} New</button></div>`;
+  let h = `<div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-weight:800;font-size:26px;margin-bottom:16px">Let's <span style="color:var(--red)">Train</span></div>
+  <div class="sect"><div class="stitle">My Workouts</div><button class="btn btn-p btn-sm" onclick="openNewWorkout()">${IC.plus} New</button></div>`;
   if (!db.workouts.length) return h + empty('workouts','No workouts yet','Create your first workout to get started.');
   const exMap={}, sessCnt={};
   db.exercises.forEach(e=>exMap[e.id]=e);
