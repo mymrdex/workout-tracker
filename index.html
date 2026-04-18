@@ -702,13 +702,13 @@ function clearWorkoutSessions(wid){
   const n=db.sessions.filter(s=>s.workoutId===wid).length;
   confirm2('Clear Sessions',`All ${n} sessions will be deleted.`,'Clear',()=>{
     db.sessions=db.sessions.filter(s=>s.workoutId!==wid);
-    save();dirty('history','progress');openWorkoutPanel(wid);toast('Cleared');
+    save();dirty('history','progress','exercises');openWorkoutPanel(wid);toast('Cleared');
   });
 }
 function delSessFromPanel(sid,wid){
   confirm2('Delete Session','This session will be permanently deleted.','Delete',()=>{
     db.sessions=db.sessions.filter(s=>s.id!==sid);
-    save();dirty('history','progress');openWorkoutPanel(wid);toast('Deleted');
+    save();dirty('history','progress','exercises');openWorkoutPanel(wid);toast('Deleted');
   });
 }
 function openAddExToWorkout(wid){
@@ -767,8 +767,8 @@ function pageExercises(){
   }));
   const groups={};
   db.exercises.forEach(e=>{const c=e.category||'Other';if(!groups[c])groups[c]=[];groups[c].push(e)});
-  Object.keys(groups).forEach(c=>groups[c].sort((a,b)=>a.name.localeCompare(b.name)));
-  Object.entries(groups).sort(([a],[b])=>a.localeCompare(b)).forEach(([cat,exs])=>{
+  Object.keys(groups).forEach(c=>groups[c].sort((a,b)=>a.name<b.name?-1:a.name>b.name?1:0));
+  Object.entries(groups).sort(([a],[b])=>a<b?-1:a>b?1:0).forEach(([cat,exs])=>{
     h+=`<div class="sect" style="padding-top:16px"><div class="stitle">${cat}</div></div><div class="card">`;
     exs.forEach(e=>{
       h+=`<div class="list-item" onclick="openExercisePanel('${e.id}')">
@@ -846,7 +846,7 @@ function delExLog(sessionId,exerciseId){
   confirm2('Delete Entry',"This exercise log will be removed from that session.",'Delete',()=>{
     const s=db.sessions.find(x=>x.id===sessionId);
     if(s){s.exercises=s.exercises.filter(e=>e.exerciseId!==exerciseId);if(!s.exercises.length)db.sessions=db.sessions.filter(x=>x.id!==sessionId)}
-    save();dirty('progress','history');openExercisePanel(exerciseId);toast('Deleted');
+    save();dirty('progress','history','exercises');openExercisePanel(exerciseId);toast('Deleted');
   });
 }
 function setExRange(id,range,el){
@@ -936,7 +936,7 @@ function openSessionSheet(id){
 function deleteSession(id){
   confirm2('Delete Session','This session will be permanently deleted.','Delete',()=>{
     db.sessions=db.sessions.filter(s=>s.id!==id);
-    save();dirty('history','progress');closeSheet();toast('Deleted');
+    save();dirty('history','progress','exercises');closeSheet();toast('Deleted');
   });
 }
 
